@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Hoteles extends CI_Controller
 {
-
+	
 	function __construct()
 	{
 		parent::__construct();
@@ -52,7 +52,7 @@ class Hoteles extends CI_Controller
 						"cedula" => $this->input->post("cc"),
 						"telefono" => $this->input->post("telefono"),
 						"correo" => $this->input->post("correo"),
-						"clave" => $this->input->post("clave"),
+						"clave" => password_hash($this->input->post("clave"), PASSWORD_DEFAULT),
 						"actor" => "hotel"
 					);
 					$resultado = $this->Hotel_model->registrar_hotel($datos);
@@ -100,6 +100,8 @@ class Hoteles extends CI_Controller
 
 	public function registrar_habitacion()
 	{
+		$this->load->library('image_lib');
+
 		$this->load->view('hotel/header');
 		$this->load->view('hotel/sidebar');
 		$this->load->view('hotel/navbar');
@@ -135,6 +137,7 @@ class Hoteles extends CI_Controller
 			//tamaño maximo en kilobytes
 			$config['max_width'] = '800';
 			$config['max_height'] = '800';
+			// $config['image_library'] = 'gd2';
 			$this->load->library('upload', $config);
 			if (!$this->upload->do_upload('imagen')) {
 				//redireccionar a otra vista 
@@ -147,6 +150,7 @@ class Hoteles extends CI_Controller
 					'n_camas' => $this->input->post("n_camas"),
 					'n_personas' => $this->input->post("n_personas"),
 					'precio' => $this->input->post("precio"),
+					'categoria' => $this->input->post("categoria"),
 					'n_habitacion' => $this->input->post("n_habitacion"),
 					'ciudad' => strtoupper($this->input->post("ciudad")),
 					'imagen' => $imagen,

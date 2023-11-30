@@ -56,14 +56,14 @@ class Usuarios extends CI_Controller
 							"telefono" => $this->input->post("telefono"),
 							"nacimiento" => $this->input->post("f_nacimiento"),
 							"correo" => $this->input->post("correo"),
-							"clave" => $this->input->post("clave"),
+							"clave" => password_hash($this->input->post("clave"), PASSWORD_DEFAULT),
 							"actor" => "usuario"
 						);
 						$resultado = $this->Usuario_model->registrar_usuario($datos);
-
+						// password_verify($this->input->post('clave'), @$user->clave)
 						if ($resultado) {
 							if ($user = $this->Auth_model->iniciarSesion_usuario($this->input->post('correo'),)) {
-								if ($this->input->post('clave') == @$user->clave) {
+								if (password_verify($this->input->post('clave'), @$user->clave)) {
 									$sesion = array(
 										'usuario' => $user->nombre,
 										'id' => $user->_id,
@@ -95,22 +95,10 @@ class Usuarios extends CI_Controller
 		}
 	}
 
-	// public function sitio_de_reservas()
-	// {
-	// 	$this->load->view('principal/head');
-	// 	$this->load->view('principal/header_sesion');
-	// 	$this->load->view('principal/content-front');
-	// 	$this->load->view('principal/form/buscar-habitacion');
-	// 	$this->load->view('principal/content-end');
-	// 	$this->load->view('principal/footer');
-	// }
-
 	public function reservar($id_habitaccion, $precio, $n_habitacion)
 	{
 		$entrada = $_SESSION['entrada'];
 		$salida = $_SESSION['salida'];
-
-		
 
 		$reserva = array(
 			'id_usuario' => $_SESSION['id'],
@@ -133,33 +121,17 @@ class Usuarios extends CI_Controller
 
 			if ($resultado) {
 
-				// $habitacion = array(
-				// 	'_id' => $this->mongodb->getObjetId($id_habitaccion)
-				// );
-
-				// $datos = array(
-				// 	[
-				// 		'$set' => [
-				// 			'disponible' => false,
-				// 		]
-				// 	]
-				// );
-
-				// if ($result = $this->Habitacion_model->identificador_habitacion($id_habitaccion)) {
-				// 	$this->Habitacion_model->estado_habitacion($datos, $habitacion);
-				// }
-
 				echo '<script>
 				alert("Reserva exitosa");
 				</script>';
 
-				echo '<script>window.location.href="http://localhost/sistemaHotelero/"</script>';
+				echo '<script>window.location.href="https://ce4d-186-169-233-178.ngrok-free.app/sistemaHotelero/"</script>';
 			} else {
 				echo '<script>
 				alert("No se pudo realizar la reserva");
 				</script>';
 
-				echo '<script>window.location.href="http://localhost/sistemaHotelero/"</script>';
+				echo '<script>window.location.href="https://ce4d-186-169-233-178.ngrok-free.app/sistemaHotelero/"</script>';
 			}
 		}
 	}
@@ -179,9 +151,5 @@ class Usuarios extends CI_Controller
 		$resultado = $this->Usuario_model->eliminarReserva($id);
 
 		redirect(base_url() . 'mis-Reservas');
-	}
-
-	function ubicacion(){
-		$this->load->view('habitacion/ubicacion.html');
 	}
 }

@@ -12,6 +12,7 @@
             <label for="clave">Contrseña:</label>
             <input type="password" name="clave" id="clave">
         </div>
+		<a href="#" class="">Recuperar Contraseña</a>
         <button type="submit" name="iniciar">INGRESAR</button>
     </form>
 </div>

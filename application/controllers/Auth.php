@@ -35,8 +35,8 @@ class Auth extends CI_Controller
 				$admin = $this->Auth_model->iniciarSesion_admin($this->input->post('correo'));
 
 				if ($user || $hotel || $admin) {
-					if ($this->input->post('clave') == @$hotel->clave || $this->input->post('clave') == @$user->clave || $this->input->post('clave') == @$admin->clave) {
-
+					
+					if (password_verify($this->input->post('clave'), @$hotel->clave) || password_verify($this->input->post('clave'), @$user->clave) || $this->input->post('clave') == @$admin->clave) {
 
 						if ($user->actor == "usuario") {
 							$sesion = array(

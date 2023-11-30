@@ -16,7 +16,7 @@ class Habitacion extends CI_Controller
 			redirect(base_url() . 'ver-habitaciones');
 		} else if ($this->session->userdata('actor') == 'admin') {
 			redirect(base_url() . 'panel-admin');
-		}else if(!isset($_SESSION['usuario'])){
+		} else if (!isset($_SESSION['usuario'])) {
 			// redirect(base_url());
 		}
 	}
@@ -45,7 +45,7 @@ class Habitacion extends CI_Controller
 			if (!empty($this->input->post('f_entrada')) || !empty($this->input->post('f_salida'))) {
 
 				$datetime1 = new DateTime($entrada, new DateTimeZone('America/Bogota'));
-				$datetime2 = new DateTime($salida , new DateTimeZone('America/Bogota'));
+				$datetime2 = new DateTime($salida, new DateTimeZone('America/Bogota'));
 				$interval = $datetime1->diff($datetime2);
 				$dias = (int) $interval->format('%R%a');
 
@@ -55,7 +55,7 @@ class Habitacion extends CI_Controller
 						'salida' => $salida,
 						'dias' => $dias
 					);
-				
+
 					$this->session->set_userdata($buscar);
 
 					$caracteres = substr($lugar, 0, 3);
@@ -65,7 +65,6 @@ class Habitacion extends CI_Controller
 						'habitacion' => $this->Habitacion_model->buscar_habitacion($caracteres, $caracteresM)
 					);
 					$this->load->view('habitacion/habitaciones.php', $habitaciones);
-
 				} else {
 					$mensaje['msg'] = 'Por favor introduzca una fechas valida';
 					$this->load->view('principal/head');
@@ -85,7 +84,15 @@ class Habitacion extends CI_Controller
 				$this->load->view('principal/footer');
 			}
 		} else {
+			// unset($verificar);
 			echo 'Algo a salido mal :(';
 		}
+	}
+
+	function detalles($id)
+	{
+		$hb = $this->Habitacion_model->detalles($id);
+
+		$this->load->view('habitacion/detalles.php', array('hb' => $hb));
 	}
 }
